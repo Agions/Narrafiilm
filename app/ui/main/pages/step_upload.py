@@ -2,7 +2,9 @@
 # -*- coding: utf-8 -*-
 """Step 1: 上传配置 — OKLCH Design Tokens"""
 
-import os, json, subprocess, logging
+import logging
+import os
+import subprocess
 from pathlib import Path
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, QLabel, QPushButton,
@@ -106,15 +108,18 @@ class VideoDropZone(QFrame):
             if urls and self._is_video(urls[0].toLocalFile()):
                 event.acceptProposedAction()
                 self.setProperty("active", "true")
-                self.style().unpolish(self); self.style().polish(self)
+                self.style().unpolish(self)
+                self.style().polish(self)
 
     def dragLeaveEvent(self, event):
         self.setProperty("active", "false")
-        self.style().unpolish(self); self.style().polish(self)
+        self.style().unpolish(self)
+        self.style().polish(self)
 
     def dropEvent(self, event: QDropEvent):
         self.setProperty("active", "false")
-        self.style().unpolish(self); self.style().polish(self)
+        self.style().unpolish(self)
+        self.style().polish(self)
         urls = event.mimeData().urls()
         if urls and self._is_video(urls[0].toLocalFile()):
             self._set_file(urls[0].toLocalFile())
@@ -170,9 +175,12 @@ class VideoMetadataPanel(QFrame):
                     self.labels["resolution"].setText(f"{s.get('width','?')}×{s.get('height','?')}")
                     break
             size = int(fmt.get("size", 0))
-            if size > 1024**3: self.labels["size"].setText(f"{size/1024**3:.1f} GB")
-            elif size > 1024**2: self.labels["size"].setText(f"{size/1024**2:.0f} MB")
-            else: self.labels["size"].setText(f"{size/1024:.0f} KB")
+            if size > 1024**3:
+                self.labels["size"].setText(f"{size/1024**3:.1f} GB")
+            elif size > 1024**2:
+                self.labels["size"].setText(f"{size/1024**2:.0f} MB")
+            else:
+                self.labels["size"].setText(f"{size/1024:.0f} KB")
             self.labels["format"].setText(fmt.get("format_name", "").split(",")[0])
         except Exception as e:
             logging.getLogger(__name__).warning(f"获取文件信息失败: {e}")

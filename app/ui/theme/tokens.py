@@ -228,9 +228,7 @@ def generate_css_variables(mode: str = "dark") -> str:
 
     lines = [":root {"]
     for key, value in COLORS.items():
-        if key in tokens:
-            lines.append(f"    --color-{key}: {value};")
-        elif not key.startswith("_"):  # 跳过私有 key
+        if key in tokens or not key.startswith("_"):  # 跳过私有 key
             lines.append(f"    --color-{key}: {value};")
     lines.append("}")
 
